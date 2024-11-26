@@ -9,6 +9,6 @@ __pycache__
 *.pth
 
 .ipynb_checkpoints
-*.ipynb
+# *.ipynb
 
 /_draft

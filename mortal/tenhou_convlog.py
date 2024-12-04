@@ -80,7 +80,7 @@ def get_id_list(gz_path):
 
 def proc_gz(mjai_reviewer_path, gz_path, output_base_dir, max_workers=4):
     """
-    处理单个 .gz 文件：解压、提取 Tenhou ID、转换为 mjai JSON 并保存。
+    处理单个 .gz 文件：解压、提取 Tenhou ID、转换为 mjai JSON 并保存为 .json.gz 文件。
     """
     date_str = Path(gz_path).stem  # 获取文件名（去掉路径和扩展名）
     id_list = get_id_list(gz_path)
@@ -109,13 +109,14 @@ def proc_gz(mjai_reviewer_path, gz_path, output_base_dir, max_workers=4):
             tenhou_id = future_to_id[future]
             mjai_log = future.result()
             if mjai_log:
-                outfile_path = outdir_path / f"{tenhou_id}.json"
+                # 直接保存为 .json.gz 文件
+                outfile_gz_path = outdir_path / f"{tenhou_id}.json.gz"
                 try:
-                    with open(outfile_path, "w", encoding='utf-8') as f:
-                        f.write(mjai_log)
-                    logging.info(f"Successfully converted and saved {tenhou_id} to {outfile_path}")
+                    with gzip.open(outfile_gz_path, 'wt', encoding='utf-8') as f_gz:
+                        f_gz.write(mjai_log)
+                    logging.info(f"Successfully converted and saved {tenhou_id}.json.gz to {outfile_gz_path}")
                 except Exception as e:
-                    logging.error(f"Failed to write mjai log for ID {tenhou_id} to {outfile_path}: {e}")
+                    logging.error(f"Failed to write mjai log for ID {tenhou_id} to {outfile_gz_path}: {e}")
 
 def proc_year(mjai_reviewer_path, year, input_base_dir, output_base_dir, max_workers=4):
     """

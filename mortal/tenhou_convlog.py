@@ -129,7 +129,7 @@ def proc_year(mjai_reviewer_path, year, input_base_dir, output_base_dir, max_wor
         return
 
     logging.info(f"Processing {len(gz_list)} .gz files for year {year}")
-    for gz_path in gz_list[:1]:
+    for gz_path in gz_list[:10]:
         logging.info(f"Processing file: {gz_path}")
         proc_gz(mjai_reviewer_path, gz_path, output_base_dir, max_workers)
 
